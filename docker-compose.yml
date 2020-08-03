@@ -1,0 +1,51 @@
+version: "3"
+
+services:
+  # nginx server
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - ${NGINX_HTTP_PORT}:80
+      - ${NGINX_HTTPS_PORT}:443
+    volumes:
+      - ${PUBLIC_FOLDER}:/var/www
+      - ./nginx/sites/:/etc/nginx/sites-available
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./nginx/log/access.log:/var/log/nginx/access.log
+      - ./nginx/log/error.log:/var/log/nginx/error.log
+    depends_on:
+      - php-fpm
+    links:
+      - php-fpm
+
+  # php-fpm socket
+  php-fpm:
+    build:
+      context: ./php-fpm
+    container_name: php-fpm
+    restart: unless-stopped
+    volumes:
+      - ${PUBLIC_FOLDER}:/var/www
+    depends_on:
+      - mysql
+
+  # mysql server
+  mysql:
+    build:
+      context: ./mysql
+    container_name: mysql
+    restart: unless-stopped
+    env_file: ./mysql/.env
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+
+  # composer
+  composer:
+    image: "composer"
+    container_name: composer
+    volumes:
+      - ${PUBLIC_FOLDER}:/app
+    command: install

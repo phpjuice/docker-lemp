@@ -1,7 +1,7 @@
 # nginx
 FROM nginx:alpine
 
-LABEL maintainer="ElHaouari Mohammed <mohammed.elhaouari@dzconseil.com>"
+LABEL maintainer="PHPJuice <phpjuice@gmail.com>"
 
 COPY nginx.conf /etc/nginx/
 

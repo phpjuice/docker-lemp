@@ -1,7 +1,7 @@
 # mariadb
 FROM mariadb:latest
 
-LABEL maintainer="ElHaouari Mohammed <mohammed.elhaouari@dzconseil.com>"
+LABEL maintainer="PHPJuice <phpjuice@gmail.com>"
 
 CMD ["mysqld"]
 
